@@ -1,24 +1,63 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
+import { doesUsernameExist } from '../services/firebase';
+import FirebaseContext from '../context/firebase';
 import logo from '../images/logo.png';
 
 function SignUp() {
-    const [ username, setUsername ] = useState("");
-    const [ fullName, setFullName ] = useState("");
-    const [ emailAddress, setEmailAddress ] = useState("");
-    const [ password, setPassword ] = useState("");
+    let history = useHistory();
+    const { firebase } = useContext(FirebaseContext)
 
-    const [ error, setError ] = useState("");
-    const isInvalid = password === '' || emailAddress === '';
+    const [username, setUsername] = useState("");
+    const [fullName, setFullName] = useState("");
+    const [emailAddress, setEmailAddress ] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleSignup = (event) => {
-
-    }
+    const [error, setError] = useState("");
+    const isInvalid = username === "" || fullName === "" || password === '' || emailAddress === '';
 
     useEffect(() => {
         document.title = "Signup - Instagram";
     }, [])
+
+    const handleSignup = async (event) => {
+        event.preventDefault();
+        
+        const usernameExists = await doesUsernameExist(username);
+
+        if(!usernameExists.length) {
+            try {
+                const createdUserResult = await firebase.auth().createUserWithEmailAndPassword(emailAddress, password);
+
+                await createdUserResult.user.updateProfile({
+                    displayName: username
+                });
+
+                await firebase.firestore().collection("users").add({
+                    userId: createdUserResult.user.uid,
+                    username: username.toLowerCase(),
+                    fullName: fullName,
+                    emailAddres: emailAddress.toLowerCase(),
+                    following: [],
+                    followers: [],
+                    dateCreate: Date.now()
+                })
+
+                history.push(ROUTES.DASHBOARD);
+            } catch (error) {
+                setFullName("");
+                setError(error.message);
+            };
+        } else {
+            setUsername("");
+            setFullName("");
+            setEmailAddress("");
+            setPassword("");
+            setError('That username is already taken, please try another!')
+        }
+
+    }
 
     return (
         <div className="container flex mx-auto max-w-xs items-center h-screen">
@@ -27,7 +66,7 @@ function SignUp() {
                     <h1 className="flex justify-center w-full">
                         <img src={logo} alt="Instagram Logo" className="mt-2 w-6/12 mb-4"/>
                     </h1>
-                    {error && <p className="mb-4 text-xs text-red-500">{error}</p>}
+                    {error && <p className="mb-4 text-xs text-red-500 text-center">{error}</p>}
 
                     <form onSubmit={handleSignup} method="POST">
                         <input 
