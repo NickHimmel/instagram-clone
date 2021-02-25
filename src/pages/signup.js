@@ -7,7 +7,7 @@ import logo from '../images/logo.png';
 
 function SignUp() {
     let history = useHistory();
-    const { firebase } = useContext(FirebaseContext)
+    const { firebase } = useContext(FirebaseContext);
 
     const [username, setUsername] = useState("");
     const [fullName, setFullName] = useState("");
