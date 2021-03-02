@@ -38,7 +38,7 @@ function SignUp() {
                     userId: createdUserResult.user.uid,
                     username: username.toLowerCase(),
                     fullName: fullName,
-                    emailAddres: emailAddress.toLowerCase(),
+                    emailAddress: emailAddress.toLowerCase(),
                     following: [],
                     followers: [],
                     dateCreate: Date.now()
