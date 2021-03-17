@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
 import FirebaseContext from '../context/firebase';
 import UserContext from '../context/user';
-import logo from '../images/logo.png';
-import avatar from '../images/avatars/blue.jpg';
 
 function Header() {
     const { firebase } = useContext(FirebaseContext);
@@ -17,7 +15,7 @@ function Header() {
                     <div className="text-gray-700 text-center flex items-center align-items">
                         <h1>
                             <Link to={ROUTES.DASHBOARD} aria-label="Home">
-                                <img src={logo} alt="Instagram Logo" className="mt-2 w-6/12" />
+                                <img src="images/logo.png" alt="Instagram Logo" className="mt-2 w-6/12" />
                             </Link>
                         </h1>
                     </div>
@@ -48,7 +46,7 @@ function Header() {
                                         <Link to={`/p/${user.displayName}`}>
                                             <img 
                                                 className="rounded-full h-8 w-8 flex" 
-                                                src={avatar} 
+                                                src={`/images/avatars/${user.displayName}.jpg`}
                                                 alt={`${user.displayName}`}/>
                                         </Link>
                                     </div>

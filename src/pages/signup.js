@@ -3,7 +3,6 @@ import { Link, useHistory } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
 import { doesUsernameExist } from '../services/firebase';
 import FirebaseContext from '../context/firebase';
-import logo from '../images/logo.png';
 
 function SignUp() {
     let history = useHistory();
@@ -64,7 +63,7 @@ function SignUp() {
             <div className="flex flex-col">
                 <div className="flex flex-col items-center bg-white p-4 border mb-4">
                     <h1 className="flex justify-center w-full">
-                        <img src={logo} alt="Instagram Logo" className="mt-2 w-6/12 mb-4"/>
+                        <img src="/images/logo.png" alt="Instagram Logo" className="mt-2 w-6/12 mb-4"/>
                     </h1>
                     {error && <p className="mb-4 text-xs text-red-500 text-center">{error}</p>}
 

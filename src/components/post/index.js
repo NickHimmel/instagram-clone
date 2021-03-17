@@ -1,14 +1,34 @@
-import React from 'react';
-import Header from './header.js';
-import Image from './image.js';
-import Actions from './actions.js';
-import Comments from './comments.js';
-import AddComment from './add-comment.js'
-import Footer from './footer.js';
+import React, { useRef } from 'react';
+import Header from './header';
+import Image from './image';
+import Actions from './actions';
+import Comments from './comments';
+import AddComment from './add-comment';
+import Footer from './footer';
 
 function Post({ content }) {
+    const commentInput = useRef(null);
+
+    const handleFocus = () => commentInput.current.focus();
+
     return (
-        <p>I am a Post</p>
+        <div className="rounded col-span-4 border bg-white mb-16">
+            <Header username={content.username}/>
+            <Image src={content.imageSrc} caption={content.caption} />
+            <Actions 
+                docId={content.docId}
+                totalLikes={content.likes.length}
+                likedPhoto={content.userLikedPhoto}
+                handleFocus={handleFocus}
+            />
+            <Footer username={content.username} caption={content.caption} />
+            <Comments 
+                docId={content.docId}
+                comments={content.comments} 
+                posted={content.dateCreated}
+                commentInput={commentInput}
+            />
+        </div>
     )
 }
 
