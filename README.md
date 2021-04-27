@@ -1,4 +1,11 @@
-# Getting Started with Create React App
+# Instagram Clone
+
+Following along with Scrimba's Build an Instagram Clone in React couse with Karl Hadwen. Learning more about React Hooks and how to integrate Firebase.
+
+[scrimba](https://scrimba.com/learn/photoapp) 
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
