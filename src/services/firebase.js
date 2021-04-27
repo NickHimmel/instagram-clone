@@ -1,4 +1,4 @@
-import { firebase } from '../lib/firebase';
+import { firebase, FieldValue } from '../lib/firebase';
 
 export async function doesUsernameExist(username) {
     const result = await firebase
@@ -50,4 +50,80 @@ export async function getUserFollowedPhotos(userId, followingUserIds) {
     )
 
     return photosWithUserDetails;
+}
+
+export async function getSuggestedProfiles(userId) {
+    const result = await firebase.firestore().collection('users').limit(10).get();
+    const [{ following }] = await getUserByUserId(userId)
+    
+    return result.docs
+        .map((user) => ({ ...user.data(), docId: user.id }))
+        .filter((profile) => profile.userId !== userId && !following.includes(profile.userId))
+}
+
+export async function updateUserFollowing(docId, profileId, isFollowingProfile) {
+    return firebase
+        .firestore()
+        .collection('users')
+        .doc(docId)
+        .update({
+            following: isFollowingProfile
+                ? FieldValue.arrayRemove(profileId)
+                : FieldValue.arrayUnion(profileId)
+        });
+}
+
+export async function updateFollowedUserFollowers(userDocId, userId, isFollowingProfile) {
+    return firebase
+        .firestore()
+        .collection('users')
+        .doc(userDocId)
+        .update({
+            followers: isFollowingProfile
+                ? FieldValue.arrayRemove(userId)
+                : FieldValue.arrayUnion(userId)
+        })
+}
+
+export async function getUserByUsername(username) {
+    const result = await firebase
+        .firestore()
+        .collection('users')
+        .where('username', '==', username)
+        .get();
+
+    const user = result.docs.map((item) => ({
+        ...item.data(),
+        docId: item.id
+    }));
+
+    return user.length > 0 ? user : false;
+}
+
+export async function getUserIdByUsername(username) {
+    const result = await firebase
+        .firestore()
+        .collection('users')
+        .where('username', '==', username)
+        .get();
+    const [{ userId = null }] = result.docs.map((item) => ({
+        ...item.data(),
+    }));
+    
+    return userId; 
+}
+
+export async function getUserPhotosByUsername(username) {
+    const userId = await getUserIdByUsername(username);
+    const results = await firebase
+        .firestore()
+        .collection("photos")
+        .where("userId", "==", userId)
+        .get();
+
+    const photos = results.docs.map((item) => ({
+        ...item.data(),
+        docId: item.id
+    }));
+    return photos;
 }

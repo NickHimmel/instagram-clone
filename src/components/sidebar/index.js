@@ -1,12 +1,17 @@
 import React from 'react';
 import useUser from '../../hooks/use-user'
+import User from './user';
+import Suggestions from './suggestions';
 
 function Sidebar() {
-    const { user: { docId, userId, following, username, fullName } = {} } = useUser();
+    const { 
+        user: { fullName, username, userId } 
+    } = useUser();
     
     return (
-        <div className="col-span-1">
-            <p>I am the sidebar</p>
+        <div className="p4">
+            <User username={username} fullName={fullName} />
+            <Suggestions userId={userId} />
         </div>
     )
 }

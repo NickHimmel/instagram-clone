@@ -15,7 +15,7 @@ function Header() {
                     <div className="text-gray-700 text-center flex items-center align-items">
                         <h1>
                             <Link to={ROUTES.DASHBOARD} aria-label="Home">
-                                <img src="images/logo.png" alt="Instagram Logo" className="mt-2 w-6/12" />
+                                <img src="/images/logo.png" alt="Instagram Logo" className="mt-2 w-6/12" />
                             </Link>
                         </h1>
                     </div>
