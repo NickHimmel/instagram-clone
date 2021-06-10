@@ -41,7 +41,7 @@ function SignUp() {
                     following: [],
                     followers: [],
                     dateCreate: Date.now()
-                })
+                });
 
                 history.push(ROUTES.DASHBOARD);
             } catch (error) {
